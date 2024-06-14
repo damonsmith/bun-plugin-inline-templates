@@ -26,6 +26,23 @@ await Bun.build({
 });
 ```
 
+Or if you're using it with bun-plugin-html then add it after that plugin like this:
+```typescript
+import html from 'bun-plugin-html';
+import inlineTemplates from 'bun-plugin-inline-templates';
+
+await Bun.build({
+  entrypoints: ['./src/index.html', './src/other.html'],
+  outdir: './dist',  // Specify the output directory
+  plugins: [
+    html(),
+    inlineTemplates()
+  ],
+});
+```
+
+
+
 ## Acknowledgements
 
 This plugin was created by mostly copying the bun-plugin-html plugin from Bjorn at https://github.com/BjornTheProgrammer/bun-plugin-html

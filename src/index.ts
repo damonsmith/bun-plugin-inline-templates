@@ -67,7 +67,17 @@ const inlineTemplates = (): BunPlugin => {
 				if (!(path.extname(entrypoint) === '.html' || path.extname(entrypoint) === '.htm')) continue;
 
 				let entrypointFile = Bun.file(entrypoint);
-				const { document } = parseHTML(await entrypointFile.text());
+				let entrypointDestFile = path.join(build.config.outdir || 'dist', path.basename(entrypoint));
+				
+				// Determine if another plugin has already put the entrypoint into the outdir
+				// folder, and if so use that as the source instead of the original entrypoint.
+				// This allows the plugin to run after bun-plugin-html:
+				const finalDestFile = Bun.file(entrypointDestFile);
+				const finalDestContent = await finalDestFile.exists() ? await finalDestFile.text() : '';
+				const useDestFile = finalDestContent.indexOf('link rel="import"') !== -1;
+				const textContent = useDestFile ? await finalDestFile.text() : await entrypointFile.text();
+
+				const { document } = parseHTML(textContent);
 
 				const files = await getAllFiles(document, entrypoint);
 
@@ -83,10 +93,10 @@ const inlineTemplates = (): BunPlugin => {
 				const commonPath = findLastCommonPath(paths);
 
 				for (const file of files) {
-					const content = await file.file.text();
-
 					const isEntryPoint = path.relative(file.path, entrypoint).length === 0;
 					
+					const content = await file.file.text();
+
 					if (!isEntryPoint) {
 						const element = findElementFromAttibute(document, file.attribute);
 						const htmlContentHolder = document.createElement('span');
