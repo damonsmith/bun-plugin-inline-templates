@@ -1,0 +1,39 @@
+{
+  "name": "bun-plugin-inline-templates",
+  "version": "1.0.0",
+  "author": "Damon Smith",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damonsmith/bun-plugin-inline-templates.git"
+  },
+  "main": "dist/index.js",
+  "module": "index.ts",
+  "dependencies": {
+    "linkedom": "^0.15.3"
+  },
+  "devDependencies": {
+    "bun-plugin-dts": "^0.2.0",
+    "bun-types": "latest",
+    "typescript": "^5.3.2"
+  },
+  "bugs": "https://github.com/damonsmith/bun-plugin-inline-templates/issues",
+  "description": "A plugin for bun build which inlines html templates.",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "bun",
+    "plugin",
+    "template",
+    "inline",
+    "build",
+    "bun.build"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "build": "bun run build.ts"
+  },
+  "type": "module",
+  "types": "dist/index.d.ts"
+}
